@@ -1,9 +1,18 @@
 ## sendosc
+
 sendosc is a simple command-line tool for sending OSC packet.
 
-## usage
+
+This is a minimal fork/repackaging of yoggy's `sendosc` with all of its dependencies to create a statically linked version on macOS via cmake.
+
+It probably should work on Linux as well (but not tested yet).
+
+
+## Usage
+
 ```
 sendosc
+
 usage : sendosc dst_host dst_port path [[type] [param]] ...
  
    type
@@ -20,86 +29,22 @@ usage : sendosc dst_host dst_port path [[type] [param]] ...
      ./sendosc 127.0.0.1 5678 /test5 s teststring i 123 f 123.4 b false
 ```
 
-## How to install
-### macOS 
-Install via [Homebrew](https://brew.sh/)
+## How to Build
+
+You can just run `./build.sh` or type the following:
 
 ```
-$ brew install yoggy/tap/sendosc
-```
-
-### debian & ubuntu
-```
-$ sudo apt-get install liboscpack-dev
-$ cd ~
-$ git clone https://github.com/yoggy/sendosc.git
-$ cd sendosc
-$ cmake .
-$ make
-$ sudo make install  
-```
-
-### Archlinux
-##### get dependencies and prepare folder
-````
-$ cd ~
-$ git clone https://github.com/arturoc/oscpack
-$ cd oscpack 
-````
-
-##### enable -fpic flag for shared library linking
-```
-$ nano Makefile 
-```
-change this line
-```
-COPTS = -Wall -O3
-```
-for this one
-```
-COPTS = -Wall -O3 -fPIC
-```
-##### compile and install 
-```
-$ make
-$ sudo make install
-```
-
-#### clone, compile and install sendosc 
-```
-$ cd ~
-$ git clone https://github.com/yoggy/sendosc.git
-$ cd sendosc
-$ sudo pacman -S cmake
-$ cmake .
-$ make
-$ sudo cp ./sendosc /usr/local/bin/sendosc
-```
-## Windows (experimental)
-pre-built binary for windows
-
-- [sendosc-win-1.0.2.zip](https://github.com/yoggy/sendosc/releases/download/v1.0.2/sendosc-win-1.0.2.zip)
+mkdir build && cd build
+cmake ..
+make
 
 ```
-> git clone https://github.com/yoggy/sendosc.git
-> cd sendosc
-> mkdir build
-> cd build
-> cmake ..
-> MSBuild.exe sendosc.vcxproj /t:clean;rebuild /p:Configuration=Release;Platform="win32"
-> cd Release
-> dir sendosc.exe
 
- Volume in drive C is XXXXXXXX
- Volume Serial Number is XXXX-XXXX
+You should find a static linked version of `sendosc` in the `build` directory. Install it wherever you like.
 
- Directory of C:\work\sendosc\build\Release
-
-2019/01/16  20:38            18,432 sendosc.exe
-               1 File(s)         18,432 bytes
-```
 
 ## Copyright and license
+
 Copyright (c) 2015 yoggy
 
 Released under the [MIT license](LICENSE.txt)

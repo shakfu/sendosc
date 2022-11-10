@@ -1,33 +1,29 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(sendosc)
+
 set (CMAKE_CXX_STANDARD 11)
 
-if(WIN32)
-  include_directories( c:\\local\\oscpack_1_1_0\\include )
-  
-  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    link_directories( c:\\local\\oscpack_1_1_0\\lib\\Debug )
-  else()
-    link_directories( c:\\local\\oscpack_1_1_0\\lib\\Release )
-  endif()
-  set(LIBS ${LIBS} ws2_32 winmm)
+set(OSC ${CMAKE_SOURCE_DIR}/src/osc)
+set(IP  ${CMAKE_SOURCE_DIR}/src/ip)
 
-elseif(APPLE)
-  include_directories(/usr/local/include/oscpack /opt/homebrew/include/oscpack)
-  link_directories(/usr/local/lib /opt/homebrew/lib)
-  set(CMAKE_CXX_FLAGS "-g -Wall")
-  set(CMAKE_C_FLAGS "-g -Wall")
-else()
-  include_directories(/usr/include/oscpack)
-  include_directories(/usr/local/include/oscpack)
-  link_directories(/usr/local/lib)
-  set(CMAKE_CXX_FLAGS "-g -Wall")
-  set(CMAKE_C_FLAGS "-g -Wall")
-endif()
+set(CMAKE_CXX_FLAGS "-g -Wall")
+set(CMAKE_C_FLAGS "-g -Wall")
 
-add_executable(sendosc sendosc.cpp)
-target_link_libraries(sendosc oscpack ${LIBS})
+set (SOURCES
+    ${OSC}/OscTypes.cpp
+    ${OSC}/OscOutboundPacketStream.cpp
+    ${OSC}/OscReceivedElements.cpp
+    ${OSC}/OscPrintReceivedElements.cpp
+    ${IP}/posix/UdpSocket.cpp
+    ${IP}/IpEndpointName.cpp
+    ${IP}/posix/NetworkingUtils.cpp
+)
 
-INSTALL(TARGETS sendosc RUNTIME DESTINATION bin)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
+add_library(oscpack STATIC ${SOURCES})
+
+add_executable(sendosc src/sendosc.cpp)
+
+target_link_libraries(sendosc oscpack)
